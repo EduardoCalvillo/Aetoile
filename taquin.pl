@@ -112,6 +112,19 @@ delete(N,X,[Y|L], [Y|R]) :-
    %**********************************
    % HEURISTIQUES (PARTIE A COMPLETER)
    %**********************************
+
+
+heuristique(U,H) :-
+    heuristique2(U, H).  % utilisee ( 1 ou 2)  
+   
+   %****************
+   %HEURISTIQUE no 1
+   %****************
+   
+   % Calcul du nombre de pieces mal placees dans l'etat courant U
+   % par rapport a l'etat final F
+   
+      
 diff_l([],[],0).
 diff_l([Deb1|Rest1],[Deb2|Rest2], Somme):-
    ((Deb1=Deb2;Deb1=vide)->
@@ -125,19 +138,9 @@ diff_m([L1|Rest1],[L2|Rest2],S):-
     diff_m(Rest1, Rest2, S1),
     S is S1 + S2.
 
-heuristique(U,H) :-
-    heuristique2(U, H).  % utilisee ( 1 ou 2)  
-   
-   %****************
-   %HEURISTIQUE no 1
-   %****************
-   
-   % Calcul du nombre de pieces mal placees dans l'etat courant U
-   % par rapport a l'etat final F
-   
-   heuristique1(U, H) :- 
-      final_state(F),
-      diff_m(U,F,H).               
+heuristique1(U, H) :- 
+   final_state(F),
+   diff_m(U,F,H).               
       
       %****************
       %HEURISTIQUE no 2
@@ -146,10 +149,6 @@ heuristique(U,H) :-
       % Somme sur l'ensemble des pieces des distances de Manhattan
       % entre la position courante de la piece et sa positon dans l'etat final
       
-      heuristique2(U, H) :-      
-         final_state(F),
-         diff_m2(U,U,F,H).             
-
 coordonnee([A|_],Find,X,1):-
    nth1(X, A,Find),!.
 
@@ -157,8 +156,11 @@ coordonnee([_|Z],Find,X,Y):-
    coordonnee(Z, Find, X, Yi),
    Y is Yi+1.
 
-diff_l2([], _, _,0).
+heuristique2(U, H) :-      
+   final_state(F),
+   diff_m2(U,U,F,H).             
 
+diff_l2([], _, _,0).
 diff_l2([Deb1|Rest1],I, F, Somme):-
    ((Deb1=vide)->
    diff_l2(Rest1, I, F, Somme)
@@ -175,13 +177,3 @@ diff_m2([L1|Rest1], I, F, S):-
    diff_l2(L1,I,F,S2),
    diff_m2(Rest1,I,F, S1),
    S is S1 + S2.
-
-% heuristique3(U,H):-
-%    final_state(F),
-%    findall(H,(
-%       coordonnee(U,E,X,Y),
-%       coordonnee(F,E,XF,YF),
-%       H is abs(XF-X)+abs(YF-Y)
-%       ),Liste).
- 
-

@@ -2,7 +2,7 @@
 :- [avl].
 
 main(S0):-
-	%* calculer F H G
+	%* calculer F H G initiales
 	heuristique(S0,H0),
 	G0 is 0,
 	F0 is H0+G0,
@@ -40,6 +40,9 @@ aetoile(Pf,Pu,Q):-
 	).
 
 
+  /************** FIND SUCCESSORS****************/
+ /* ( +Etat_à_Developper, ?Liste_Succeseurs )  */
+/**********************************************/
 find_successors(E,L):-
 	findall([A,X], rule(A,1,E,X), L).
 
@@ -89,9 +92,6 @@ part2([[Etat,[F,H,G],U,Action]|R],Q,Pu,Pf,[Fp,Hp,Gp], Final_Pu, Final_Pf):-
   /************ AFFICHER ***************/
  /* ( +Q, +[U,Valeurs,Pere,Action] )  */
 /*************************************/
-
-
-
 %Enfin Q permet de reconstruire la solution lorsque l’algorithme atteint l’état terminal F : 
 %pour reconstruire le chemin optimal il suffit deremonter depuis l’état final F vers l’état initial (à l’envers)
 %en parcourant les liens pere(F), pere(pere(F)),  ... etc ... jusqu’à I.
